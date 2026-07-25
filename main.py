@@ -22,3 +22,5 @@ for raw in sys.stdin:
     elif cmd == "CHAR":
         try: print(custom_base64.get_char(arg))
         except Exception: print("INVALID")
+    elif cmd == "PAD_FOR":
+        print(custom_base64.count_padding(arg))

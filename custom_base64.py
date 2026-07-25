@@ -79,3 +79,9 @@ def get_char(value):
     print ALPHA[i]
     """
     return ALPHA[int(value)]
+
+def count_padding(n):
+    """
+    count number of '=' characters at the end of the string
+    """
+    return (3 - int(n)) % 3
