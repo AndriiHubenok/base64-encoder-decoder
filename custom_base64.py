@@ -1,14 +1,15 @@
 ALPHA = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
 
-def encode(text):
+def encode(data):
     """
     at a time (24 bits), split into four 6-bit groups, map each group
     through ALPHA, and pad the final group with '=' characters if the
     input length isn't a multiple of 3.
     """
-    chars = list(text)
-    ascii_chars = [ord(c) for c in chars]
-    binary_chars = [bin(c)[2:].zfill(8) for c in ascii_chars]
+    if isinstance(data, str):
+        data = data.encode('utf-8')
+
+    binary_chars = [bin(b)[2:].zfill(8) for b in data]
     binary_string = ''.join(binary_chars)
 
     six_bit_list = list()
@@ -28,6 +29,17 @@ def encode(text):
     response += '=' * pad_count
 
     return response
+
+def encode_bytes(byte_text):
+    """
+    encode bytes directly from hex string
+    """
+    if not byte_text:
+        return ""
+
+    raw_bytes = bytes.fromhex(byte_text)
+
+    return encode(raw_bytes)
 
 def decode(b64):
     """

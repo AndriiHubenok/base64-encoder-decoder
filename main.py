@@ -3,8 +3,12 @@ import custom_base64
 
 for raw in sys.stdin:
     line = raw.rstrip("\n")
-    if not line: continue
+    if not line: print(""); continue
     parts = line.split(" ", 1)
+
+    if len(parts) == 1:
+        print(custom_base64.encode_bytes(parts[0]))
+
     cmd = parts[0]
     arg = parts[1] if len(parts) > 1 else ""
     if cmd == "ENCODE":
