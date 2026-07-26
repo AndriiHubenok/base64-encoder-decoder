@@ -102,6 +102,32 @@ def decode_str_to_hex(string: str):
 
     return decode(string, is_bytes=True)
 
+def encode_url(byte_url):
+    """
+    encode bytes directly from hex url
+    """
+    if not byte_url:
+        return ""
+
+    raw_bytes = bytes.fromhex(byte_url)
+
+    b64 = encode(raw_bytes)
+    b64 = b64.replace("+", "-")
+    b64 = b64.replace("/", "_")
+    b64 = b64.replace("=", "")
+    return b64
+
+def decode_url(b64):
+    """
+    decode url back to hex string
+    """
+    if not b64:
+        return ""
+
+    b64 = b64.replace("-", "+")
+    b64 = b64.replace("_", "/")
+    return decode(b64, is_bytes=True)
+
 def get_value(char):
     """
     index (0-63)
