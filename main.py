@@ -7,7 +7,14 @@ for raw in sys.stdin:
     parts = line.split(" ", 1)
 
     if len(parts) == 1:
-        print(custom_base64.encode_bytes(parts[0]))
+        data = parts[0]
+
+        try:
+            bytes.fromhex(data)
+            print(custom_base64.encode_bytes(data))
+        except ValueError:
+            print(custom_base64.decode_str_to_hex(data))
+        continue
 
     cmd = parts[0]
     arg = parts[1] if len(parts) > 1 else ""

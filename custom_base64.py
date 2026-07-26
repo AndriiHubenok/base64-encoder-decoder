@@ -30,6 +30,43 @@ def encode(data):
 
     return response
 
+def decode(b64, is_bytes=False):
+    """
+    look up each character's 6-bit value in ALPHA (ignoring '=' padding),
+    recombine into bytes, and decode the result back to text.
+    """
+    encoded_chars = list(b64)
+    binary_chars = list()
+
+    for c in encoded_chars:
+
+        if c == '=':
+            continue
+
+        index = ALPHA.index(c)
+        binary_chars.append(bin(index)[2:].zfill(6))
+
+    binary_string = ''.join(binary_chars)
+
+    decoded_chars = list()
+    eight_bit_str = ''
+
+    for bit in binary_string:
+        eight_bit_str += bit
+        if len(eight_bit_str) == 8:
+            byte_val = int(eight_bit_str, 2)
+
+            if is_bytes:
+                decoded_chars.append(format(byte_val, '02x'))
+            else:
+                decoded_chars.append(chr(byte_val))
+
+            eight_bit_str = ''
+
+    response = "".join(decoded_chars)
+
+    return response
+
 def encode_bytes(byte_text):
     """
     encode bytes directly from hex string
@@ -41,32 +78,14 @@ def encode_bytes(byte_text):
 
     return encode(raw_bytes)
 
-def decode(b64):
+def decode_str_to_hex(string):
     """
-    look up each character's 6-bit value in ALPHA (ignoring '=' padding),
-    recombine into bytes, and decode the result back to text.
+    decode string back to hex string
     """
-    encoded_chars = list(b64)
-    binary_chars = list()
-    for c in encoded_chars:
-        if c == '=':
-            continue
-        index = ALPHA.index(c)
-        binary_chars.append(bin(index)[2:].zfill(6))
+    if not string:
+        return ""
 
-    binary_string = ''.join(binary_chars)
-
-    decoded_chars = list()
-    eight_bit_str = ''
-    for bit in binary_string:
-        eight_bit_str += bit
-        if len(eight_bit_str) == 8:
-            decoded_chars.append(chr(int(eight_bit_str, 2)))
-            eight_bit_str = ''
-
-    response = "".join(decoded_chars)
-
-    return response
+    return decode(string, is_bytes=True)
 
 def get_value(char):
     """
