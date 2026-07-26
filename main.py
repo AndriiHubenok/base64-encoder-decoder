@@ -12,6 +12,7 @@ for raw in sys.stdin:
         try:
             bytes.fromhex(data)
             print(custom_base64.encode_bytes(data))
+
         except ValueError:
             print(custom_base64.decode_str_to_hex(data))
         continue

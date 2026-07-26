@@ -1,3 +1,5 @@
+import re
+
 ALPHA = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
 
 def encode(data):
@@ -78,12 +80,25 @@ def encode_bytes(byte_text):
 
     return encode(raw_bytes)
 
-def decode_str_to_hex(string):
+def decode_str_to_hex(string: str):
     """
     decode string back to hex string
     """
     if not string:
         return ""
+
+    pattern = re.compile("^[A-Za-z0-9+/]+=?=?$")
+
+    if len(string) % 4 != 0:
+        return "INVALID length"
+    elif string.count('=') > 2:
+        return "INVALID padding"
+    elif string.count('=') == 1 and (string.index('=') != len(string) - 1):
+        return "INVALID padding"
+    elif string.count('=') == 2 and (string.index('=') != len(string) - 1) and (string.index('=') != len(string) - 2):
+        return "INVALID padding"
+    elif re.match(pattern, string) is None:
+        return "INVALID char"
 
     return decode(string, is_bytes=True)
 
